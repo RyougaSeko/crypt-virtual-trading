@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Ranking
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+
+    <div class="section">
+        <table class = "table table-light">
+            <thead>
+                <tr>
+                    <th>Ranking</th>
+                    <th>Username</th>
+                    <th>Id</th>
+                    <th>Profit</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- TODO: Loop through the database entries to display them in this table -->
+                {% for user_info in user_li %}
+                <tr>
+                    {% if loop.index == 1 %}
+                        <td><img src = "../static/first.png" class = "icon"></td>
+                        <td>{{ user_info.user_name }}</td>
+                        <td>{{ user_info.user_id }}</td>
+                    {% elif loop.index == 2 %}
+                        <td><img src = "../static/second.png" class = "icon"></td>
+                        <td>{{ user_info.user_name }}</td>
+                        <td>{{ user_info.user_id }}</td>
+                    {% elif loop.index == 3 %}
+                        <td><img src = "../static/third.png" class = "icon"></td>
+                        <td>{{ user_info.user_name }}</td>
+                        <td>{{ user_info.user_id }}</td>           
+                    {% else %}         
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user_info.user_name }}</td>
+                        <td>{{ user_info.user_id }}</td>
+                    {% endif %}
+
+                    {% if user_info.profit >= 0 %}
+                        <td style="color:green">+{{ user_info.profit | round(5)}}円</td>
+                    {% elif user_info.profit < 0 %}
+                        <td style="color:red">-{{ user_info.profit | round(5)}}円</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+
+{% endblock %}

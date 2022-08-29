@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+
+        <!-- http://getbootstrap.com/docs/5.1/ -->
+        <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" rel="stylesheet">
+        <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"></script>
+
+        <!-- https://favicon.io/emoji-favicons/money-bag/ -->
+        <link href="/static/favicon.ico" rel="icon">
+
+        <link href="../static/styles.css" rel="stylesheet">
+
+        <title>Virtual Crypt Trade: {% block title %}{% endblock %}</title>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+        <script type="text/javascript">
+        
+         var data = {{ profit_li | tojson }}
+         console.log(data);
+        
+        //ここに読み込ませたいデータを入れる
+        // data = [{"date":"1992-01-01","sale":27.835},{"date":"1992-02-01","sale":27.72},{"date":"1992-03-01","sale":27.848},{"date":"1992-04-01","sale":27.867},{"date":"1992-05-01","sale":27.987},{"date":"1992-06-01","sale":28.011},{"date":"1992-07-01","sale":28.183},{"date":"1992-08-01","sale":28.222},{"date":"1992-09-01","sale":28.122},{"date":"1992-10-01","sale":28.328},{"date":"1992-11-01","sale":28.184},{"date":"1992-12-01","sale":28.233},{"date":"1993-01-01","sale":28.22},{"date":"1993-02-01","sale":28.419},{"date":"1993-03-01","sale":28.307},{"date":"1993-04-01","sale":28.367},{"date":"1993-05-01","sale":28.386},{"date":"1993-06-01","sale":28.377},{"date":"1993-07-01","sale":28.554},{"date":"1993-08-01","sale":28.357},{"date":"1993-09-01","sale":28.478},{"date":"1993-10-01","sale":28.618},{"date":"1993-11-01","sale":28.625},{"date":"1993-12-01","sale":28.773},{"date":"1994-01-01","sale":28.722},{"date":"1994-02-01","sale":28.923},{"date":"1994-03-01","sale":28.914},{"date":"1994-04-01","sale":29.111},{"date":"1994-05-01","sale":29.025},{"date":"1994-06-01","sale":29.311},{"date":"1994-07-01","sale":29.149},{"date":"1994-08-01","sale":29.41},{"date":"1994-09-01","sale":29.545},{"date":"1994-10-01","sale":29.343},{"date":"1994-11-01","sale":29.52},{"date":"1994-12-01","sale":29.443},{"date":"1995-01-01","sale":29.791},{"date":"1995-02-01","sale":29.604},{"date":"1995-03-01","sale":29.619},{"date":"1995-04-01","sale":29.499},{"date":"1995-05-01","sale":29.763},{"date":"1995-06-01","sale":29.812},{"date":"1995-07-01","sale":29.675},{"date":"1995-08-01","sale":29.721},{"date":"1995-09-01","sale":29.735},{"date":"1995-10-01","sale":29.692},{"date":"1995-11-01","sale":29.858},{"date":"1995-12-01","sale":29.994},{"date":"1996-01-01","sale":30.105},{"date":"1996-02-01","sale":29.99}]
+        window.onload = function () {
+          // ここに読み込みが完了したら実行したい処理を記述する
+          var dataPoints = [];
+          var stockChart = new CanvasJS.StockChart("stockChartContainer",{
+            theme: "dark2",
+            colorSet: "colorSet2",
+            exportEnabled: true, //false
+            title:{
+              text:"Profit Chart"
+            },
+            subtitles: [{
+              text: ""
+            }],
+            charts: [{
+              axisX: {
+                crosshair: {
+                  enabled: true
+                }
+              },
+              axisY: {
+                prefix: "$",
+                suffix: "M",
+                title: "Sales Revenue in USD",
+                titleFontSize: 14
+              },
+              data: [{
+                type: "area",
+                // xValueFormatString: "MMM YYYY",
+                // yValueFormatString: "$#,###.##M",
+                dataPoints : dataPoints
+              }]
+            }],
+            navigator: {
+              slider: {
+                minimum: new Date(2010, 00, 01),
+                maximum: new Date(2014, 00, 01)
+              }
+            }
+          });
+        
+          //受信したJSONデータはdata変数に格納される
+            for(var i = 0; i < data.length; i++){
+              //ここでデータを取り出してpushしている。
+              dataPoints.push({x: new Date(data[i].date), y: Number(data[i].profit)});
+            }
+            stockChart.render();
+          };  
+    </script>
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/"><span class="bold" style="font-weight:weight;">Virtual Exchange</span></a>
+                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="navbar-nav me-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/ranking">Ranking</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/buy2">Buy2</a></li>
+                            <!-- <li class="nav-item"><a class="nav-link" href="/top">Top</a></li> -->
+
+                        </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary mb-0 text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+
+        <div id="stockChartContainer" style="height: 400px; width: 100%;"></div>
+
+        <main class="container-fluid py-5 text-center">
+            <div class="container">
+
+                <div class="section">
+                    <table class = "table table-light">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>List</th>
+                                <th>Symbol</th>
+                                <th>Shares</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- TODO: Loop through the database entries to display them in this table -->
+                            {% for portfolio in user_own_crypt_li %}
+                            <tr>
+                                <th scope="row"><img class = "icon" src="../static/crypt-img/{{portfolio.name}}.png" alt = "btc"></th>
+                                <td>{{ portfolio.name }}</td>
+                                <td>{{ portfolio.shares | round(5) }}</td>
+                                <td>{{ portfolio.total | round(0)}}円</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td><img class = "icon" src="../static/money-bag.png" alt = "cash"></td>
+                                <td>Cash</td>
+                                <td></td>
+                                <td>{{ cash | round(0) }}円</td>
+                            </tr>
+                            <tr>
+                                <td><img class = "icon" src="../static/profits.png" alt = "profits"></td>
+                                <td>Profits</td>
+                                <td></td>
+                                {% if profit >= 0 %}
+                                <td style = "color: green">+{{ profit | round(0) }}円</td>
+                                {% else %}
+                                <td style = "color: red">-{{ profit | round(0) }}円</td>
+                                {% endif %}
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <footer class="mb-5 small text-center text-muted">
+            Data provided by <a href="https://bitbank.cc/">bitbank</a>
+        </footer>
+    </body>
+</html>

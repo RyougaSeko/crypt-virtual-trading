@@ -1,0 +1,155 @@
+{% extends 'layout.html' %}
+{% block main %}
+
+    <table class="table table-light">
+        <thead>
+          <tr>
+            <th scope="col">list</th>
+            <th scope="col">Symbol</th>
+            <th scope="col">Price</th>
+            <th scope="col">24h Change</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in range(10)%}
+                <tr id="row">
+                    <td id="cell"><img style = "width: 40px; height: 40px;"></td>
+                    <td id="cell"></td>
+                    <td id="cell"></td>
+                    <td id="cell"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+      </table>
+    <!-- <h3 id = cell></h3> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+
+        let doller = 138
+        var value = 1000000000;
+
+        //1つ前の価格を入れておく配列
+        let price_li = [];
+
+        myfnc()
+        setInterval(myfnc, 3000)
+ 
+        function myfnc(){
+
+        // document.addEventListener('DOMContentLoaded', function() {
+
+            $.ajax({
+                url: 'https://api.coincap.io/v2/assets', //アクセスするURL
+                type: 'get',   //post or get
+                cache: false,        //cacheを使うか使わないかを設定
+                dataType:'json',     //data type script・xmlDocument・jsonなど
+            })
+            .done(function(response) { 
+                //通信成功時の処理
+                //成功したとき実行したいスクリプトを記載
+                //responseはjsonオブジェクト
+                console.log(response)
+                // document.querySelector('h2').innerHTML = response.data[0]["id"]
+                Example(response)
+
+            })
+            .fail(function(xhr) {  
+                //通信失敗時の処理
+                //失敗したときに実行したいスクリプトを記載
+            })
+            .always(function(xhr, msg) { 
+                //通信完了時の処理
+                //結果に関わらず実行したいスクリプトを記載
+            });   
+
+                // sleep(10000);
+    // })
+
+}
+
+
+function Example(jsonObj){
+    // const data = jsonObj.data[0]["id"];
+    // const price = jsonObj.data[0]["priceUsd"];
+    // const symbol = jsonObj.data[0]["symbol"];
+    const row = document.querySelectorAll('#row');
+
+    console.log(row);
+    //テーブルのtdオブジェクトをforEachメソッドで取得
+    row.forEach(function(row_element, index) {
+        //それぞれのrowのcellにrow_element.children[index]でアクセスできる?
+        let price = parseFloat(jsonObj.data[index]["priceUsd"]*doller).toFixed(3);
+        let symbol = jsonObj.data[index]["symbol"]
+        let chage = parseFloat(jsonObj.data[index]["changePercent24Hr"]).toFixed(3)
+        let icon_obj = row_element.children[0].children[0]
+        let symbol_obj = row_element.children[1];
+        let price_obj =  row_element.children[2];
+        let change_obj = row_element.children[3];
+
+        //rowの要素の1番目のhtmlに、APIでfetchしたデータを書く
+        symbol_obj.innerHTML = symbol;
+        price_obj.innerHTML = price + '円';
+        change_obj.innerHTML = chage + '%'
+        icon_obj.src = "../static/crypt-img/"+symbol+".png";
+        console.log(icon_obj.src)
+        //1つ前の価格と現在価格が異なっていれば、priceの色を変更
+        // console.log(price_li[index]);
+        // console.log(price);
+        changecolor(chage, change_obj)
+        
+    });
+
+   }
+   
+
+function changecolor(chage, obj) {
+
+    if (chage >= 0) {
+        //色をかえる
+        $(function(){
+            //色を指定するのはどちらでもできる
+            obj.style.color = "#189AB4"
+        });
+    } else if (chage < 0) {
+       //色をかえる
+       $(function(){
+        //色を指定するのはどちらでもできる
+        obj.style.color = "#ED1A3D"
+    
+    });
+
+    } 
+
+}
+
+//fetch自体はできているので問題はない
+// function fetch_exchange_rate(){
+
+// var doller = 0
+
+// var myHeaders = new Headers();
+// myHeaders.append("apikey", "LQAsqs9YAJxX9F9M4lTDDvDrHGvb5TT6");
+
+// var requestOptions = {
+//   method: 'GET',
+//   redirect: 'follow',
+//   headers: myHeaders
+// };
+
+// fetch("https://api.apilayer.com/fixer/convert?to=jpy&from=usd&amount=1", requestOptions)
+//   .then(response => response.json())
+//   .then(result => {
+//     // console.log(result["info"]["rate"])
+//     alertfunc(result["info"]["rate"])
+
+//   })
+//   .catch(error => console.log('error', error));
+
+// }
+
+// function alertfunc(response) {
+//     alert(response);
+// }
+
+    </script>
+{% endblock %}

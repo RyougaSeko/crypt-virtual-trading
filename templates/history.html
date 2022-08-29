@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+
+    <div class="section">
+        <table class = "table table-light">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Shares</th>
+                    <th>Price</th>
+                    <th>Transacted</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- TODO: Loop through the database entries to display them in this table -->
+                {% for transaction in tansaction_lists %}
+                <tr>
+                    <td>{{ transaction.symbol }}</td>
+                    <!--トランザクションがbuyかsellかでsharesの符号を変更-->
+                    {% if transaction.transaction_type == "sell" %}
+                        <td>-{{ transaction.shares | round(5) }}</td>
+                    {% else %}
+                        <td>{{ transaction.shares | round(5) }}</td>
+                    {% endif %}
+                    <td>{{ transaction.price | round(5) }}</td>
+                    <td>{{ transaction.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+
+<form action="/sell" method="post">
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" id="name" name="name" placeholder="Name" type="text">
+            {% for portfolio in portfolio_li %}
+            <option value={{ portfolio.name }}>{{ portfolio.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="shares" name="shares" placeholder="Shares" type="text">
+    </div>
+    <button class="btn btn-outline-light btn-lg btn-block" style = "width: 200; height: 80" type="submit">Sell</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% block main %}
+
+    <table class="table table-light">
+        <thead>
+          <tr>
+            <th scope="col">list</th>
+            <th scope="col">Symbol</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for currency_info in currency_info_li %}
+          <tr>
+              <th scope="row"><img src={{ currency_info["icon_path"] }} alt = "btc" width = "40" height = "40"></th>
+              <td>{{ currency_info["name"] }}</td>
+              <td>{{ currency_info["price"] }}円</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+</div>
+<p style = "color: white">You can buy up to {{ amount }} BTC</p>
+<form method = "POST" action="/buy">
+  <div class="mb-3">
+    <select class="form-select mx-auto w-auto" id="name" name="name" placeholder="Name" type="text">
+        {% for name in crypt_name_li %}
+        <option value={{ name }}>{{ name }}</option>
+        {% endfor %}
+    </select>
+  </div>
+  <input type="text" id="shares" name="shares" value="1"><br>
+    <br>
+    <br>
+    <button type="submit" class="btn btn-outline-light btn-lg btn-block" style = "width: 200; height: 80">Buy</button>
+</form>
+{% endblock %}
+
+<script>
+const table = document.querySelector("table")
+for(const tr of table.rows){
+    for(const td of tr.cells){
+        console.log(td.textContent)
+    }
+}
+</script>
+
+
